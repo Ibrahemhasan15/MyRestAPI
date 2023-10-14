@@ -1,14 +1,18 @@
-# Use an official Python runtime as a parent image
+# Verwende ein offizielles Python-Image als Basisimage
 FROM python:3.8-slim
 
-# Set the working directory in the container
+# Setze das Arbeitsverzeichnis innerhalb des Containers
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app/
+# Kopiere die Dateien requirements.txt und app.py in das Arbeitsverzeichnis im Container
+COPY requirements.txt /app/
+COPY index.py /app/
 
-# Install the dependencies
-RUN pip install -r requirements.txt
+# Installiere die Python-Abhängigkeiten
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Run your application
+# Öffne den Port 5000 für eingehende Anfragen
+EXPOSE 5000
+
+# Starte die Flask-Anwendung, wenn der Container gestartet wird
 CMD ["python", "app.py"]
