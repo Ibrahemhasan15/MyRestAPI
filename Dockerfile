@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
 
 # Starte die Flask-Anwendung, wenn der Container gestartet wird
-CMD ["python", "app.py"]
+CMD ["python", "index.py"]
