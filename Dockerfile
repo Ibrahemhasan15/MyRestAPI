@@ -6,8 +6,9 @@ WORKDIR /app
 
 # Kopiere die Dateien requirements.txt und app.py in das Arbeitsverzeichnis im Container
 RUN pip install --upgrade pip
-COPY requirements.txt /app/
 COPY index.py /app/
+COPY requirements.txt /app/
+
 
 # Installiere die Python-Abhängigkeiten
 RUN pip install --no-cache-dir -r requirements.txt
