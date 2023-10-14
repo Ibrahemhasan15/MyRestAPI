@@ -5,6 +5,7 @@ FROM python:3.8-slim
 WORKDIR /app
 
 # Kopiere die Dateien requirements.txt und app.py in das Arbeitsverzeichnis im Container
+RUN pip install --upgrade pip
 COPY requirements.txt /app/
 COPY index.py /app/
 
