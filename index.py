@@ -24,6 +24,7 @@ def index():
 @app.route('/send', methods=['post'])
 def process_request():
     data = request.json
+    print(data)
     prossData = Deployment()
     fianldata = prossData.request(data)
 
