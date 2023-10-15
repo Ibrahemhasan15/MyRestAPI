@@ -7,7 +7,7 @@ WORKDIR /app
 # Kopiere die Dateien requirements.txt und app.py in das Arbeitsverzeichnis im Container
 RUN pip install --upgrade pip
 
-COPY requirements.txt /app/
+COPY C:\Users\Ibrahim Hasan\Desktop\New folder (4)\MyRestAPI\requirements.txt /app/
 COPY index.py /app/
 
 
