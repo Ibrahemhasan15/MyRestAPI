@@ -6,7 +6,7 @@ class Deployment:
         print("Initialising deployment my-depyloyment-prototype")
 
     def request(self, data):
-        print("Processing request for deployment my-depyloyment-prototype")
+        print("Processing request for deployment my-depyloyment-prototype........")
         option_type_string_value = data["option-type-string"]
         interest_rate_double_value = data["interest-rate-double"]
         minimum_option_runtime_double_value = data["minimum-option-runtime-double"]
@@ -30,7 +30,7 @@ class Deployment:
         # import io
         # import base64
 
-        num_sim = 1000
+        num_sim = 100000
 
         investment = 0
 
@@ -50,10 +50,8 @@ class Deployment:
             s0 = cashflow_initial_double_value[i]
             mu = cashflow_drift_double_value[i]
             sigma = cashflow_volatility_double_value[i]
-            # alpha = np.log(2)/cashflow_velocity_double_value[i]
             lamda = cashflow_jumps_per_year_double_value[i]
             sigmaJ = cashflow_volatiliy_of_jump_double_value[i]
-            # x0 = # unklar welcher Wert
             colname = 'cf_' + str(i + 1)
             listCashflow = []
 
@@ -62,8 +60,7 @@ class Deployment:
 
             if process == 'gbm':
                 for u in range(0, num_sim, 1):
-                    temp = s0 * np.exp((mu - (sigma ** (2) / 2)) * optionRuntime[u] + scipy.stats.norm.ppf(
-                        np.random.random()) * sigma * np.sqrt(optionRuntime[u]))
+                    temp = s0 * np.exp((mu - (sigma ** (2) / 2)) * optionRuntime[u] + np.random.normal() * sigma * np.sqrt(optionRuntime[u]))
                     # print(temp)
                     # print(type(temp))
                     listCashflow.append(temp)
@@ -72,22 +69,13 @@ class Deployment:
                 alpha = np.log(2) / cashflow_velocity_double_value[i]
                 # print(alpha)
                 for u in range(0, num_sim, 1):
-                    temp = np.exp(np.log(s0) * np.exp(-alpha * optionRuntime[u]) + ((np.log(
-                        s0 * np.exp(interest_rate_double_value * optionRuntime[u])) + sigma * (2) / (4 * alpha)) - (
-                                                                                                sigma * (2) / (
-                                                                                                4 * alpha))) * (
-                                              1 - np.exp(-alpha * optionRuntime[u])) + scipy.stats.norm.ppf(
-                        np.random.random()) * np.sqrt(
-                        (1 - np.exp(-2 * alpha * optionRuntime[u])) * (sigma ** (2) / (2 * alpha))))
+                    temp = np.exp(np.log(s0) * np.exp(-alpha * optionRuntime[u]) + ((np.log(s0) + interest_rate_double_value * optionRuntime[u] + sigma * (2) / (4 * alpha)) - (sigma * (2) / (4 * alpha))) * (1 - np.exp(-alpha * optionRuntime[u])) + np.random.normal() * np.sqrt((1 - np.exp(-2 * alpha * optionRuntime[u])) * (sigma ** (2) / (2 * alpha))))
                     listCashflow.append(temp)
 
             elif process == 'gbmJ':
                 for u in range(0, num_sim, 1):
                     Nt = np.random.poisson(lam=lamda * optionRuntime[u])
-                    temp = s0 * np.exp((mu - (sigma ** (2) / 2)) * optionRuntime[u] + scipy.stats.norm.ppf(
-                        np.random.random()) * sigma * np.sqrt(
-                        optionRuntime[u])) * np.exp(
-                        -(sigmaJ / 2) * Nt + np.sqrt(Nt) * sigmaJ * scipy.stats.norm.ppf(np.random.random()))
+                    temp = s0 * np.exp((mu - (sigma ** (2) / 2)) * optionRuntime[u] + np.random.normal() * sigma * np.sqrt(optionRuntime[u])) * np.exp(-(sigmaJ / 2) * Nt + np.sqrt(Nt) * sigmaJ * np.random.normal())
                     listCashflow.append(temp)
 
             elif process == 'gmrJ':
@@ -95,14 +83,7 @@ class Deployment:
                 # print(alpha)
                 for u in range(0, num_sim, 1):
                     Nt = np.random.poisson(lam=lamda * optionRuntime[u])
-                    temp = np.exp(np.log(s0) * np.exp(-alpha * optionRuntime[u])) + ((np.log(
-                        s0 * np.exp(interest_rate_double_value * optionRuntime[u])) + sigma * (2) / (4 * alpha)) - (
-                                                                                                 sigma * (2) / (
-                                                                                                     4 * alpha))) * (
-                                       1 - np.exp(-alpha * optionRuntime[u])) + scipy.stats.norm.ppf(
-                        np.random.random()) * np.sqrt(
-                        (1 - np.exp(-2 * alpha * optionRuntime[u])) * (sigma ** (2) / (2 * alpha))) * np.exp(
-                        -(sigmaJ / 2) * Nt + np.sqrt(Nt) * sigmaJ * scipy.stats.norm.ppf(np.random.random()))
+                    temp = np.exp(np.log(s0) * np.exp(-alpha * optionRuntime[u])) + ((np.log(s0)+ interest_rate_double_value * optionRuntime[u] + sigma * (2) / (4 * alpha)) - (sigma * (2) / (4 * alpha))) * (1 - np.exp(-alpha * optionRuntime[u])) + np.random.normal() * np.sqrt((1 - np.exp(-2 * alpha * optionRuntime[u])) * (sigma ** (2) / (2 * alpha)))) * np.exp(-(sigmaJ / 2) * Nt + np.sqrt(Nt) * sigmaJ * np.random.normal())
                     listCashflow.append(temp)
 
             elif process == 'no uncertainities':
@@ -126,8 +107,7 @@ class Deployment:
             expected_iption_value_percent_value = round(final / -investment, 2)
 
         if np.var(df['net_value']) != 0:
-            confidence = scipy.stats.t.interval(0.95, len(
-                df['net_value']) - 1, loc=np.mean(df['net_value']), scale=scipy.stats.sem(df['net_value']))
+            confidence = scipy.stats.t.interval(0.95, len(df['net_value']) - 1, loc=np.mean(df['net_value']), scale=scipy.stats.sem(df['net_value']))
 
             upper_value = round(confidence[1], 2)
             lower_value = round(confidence[0], 2)
