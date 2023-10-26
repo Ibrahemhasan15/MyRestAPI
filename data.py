@@ -83,7 +83,7 @@ class Deployment:
                 # print(alpha)
                 for u in range(0, num_sim, 1):
                     Nt = np.random.poisson(lam=lamda * optionRuntime[u])
-                    temp = np.exp(np.log(s0) * np.exp(-alpha * optionRuntime[u])) + ((np.log(s0)+ interest_rate_double_value * optionRuntime[u] + sigma * (2) / (4 * alpha)) - (sigma * (2) / (4 * alpha))) * (1 - np.exp(-alpha * optionRuntime[u])) + np.random.normal() * np.sqrt((1 - np.exp(-2 * alpha * optionRuntime[u])) * (sigma ** (2) / (2 * alpha)))) * np.exp(-(sigmaJ / 2) * Nt + np.sqrt(Nt) * sigmaJ * np.random.normal())
+                    temp = np.exp(np.log(s0) * np.exp(-alpha * optionRuntime[u])) + ((np.log(s0)+ interest_rate_double_value * optionRuntime[u] + sigma * (2) / (4 * alpha)) - (sigma * (2) / (4 * alpha))) * (1 - np.exp(-alpha * optionRuntime[u])) + np.random.normal() * np.sqrt((1 - np.exp(-2 * alpha * optionRuntime[u])) * (sigma ** (2) / (2 * alpha))) * np.exp(-(sigmaJ / 2) * Nt + np.sqrt(Nt) * sigmaJ * np.random.normal())
                     listCashflow.append(temp)
 
             elif process == 'no uncertainities':
